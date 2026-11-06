@@ -1,21 +1,25 @@
-"""Lint and generate image alt text following WCAG 2.2 and the WAI alt decision tree, with HTML scanning and a vision LLM port"""
+"""Lint and generate image alt text following WCAG 2.2 and the WAI alt decision tree."""
 
 from __future__ import annotations
 
-__all__ = ["__version__", "normalize"]
+from .errors import AltTextError
+from .generate import AltTextResult, generate_alt_text
+from .html_scan import ImgFinding, scan_html
+from .images import ImageInfo, read_image_info
+from .lint import AltIssue, Purpose, lint_alt_text
+
+__all__ = [
+    "AltIssue",
+    "AltTextError",
+    "AltTextResult",
+    "ImageInfo",
+    "ImgFinding",
+    "Purpose",
+    "__version__",
+    "generate_alt_text",
+    "lint_alt_text",
+    "read_image_info",
+    "scan_html",
+]
 
 __version__ = "0.1.0"
-
-
-def normalize(value: str) -> str:
-    """Return ``value`` trimmed and lower-cased.
-
-    Placeholder API created by the template: replace it with the utility's real behavior.
-
-    Raises:
-        ValueError: if ``value`` is empty or only whitespace.
-    """
-    cleaned = value.strip()
-    if not cleaned:
-        raise ValueError("value must not be empty")
-    return cleaned.lower()

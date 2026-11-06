@@ -2,27 +2,22 @@
 
 ## Purpose
 
-`trysac-alt-text` is a small, dependency-free Python library: Lint and generate image alt text following WCAG 2.2 and the WAI alt decision tree, with HTML scanning and a vision LLM port
+`trysac-alt-text` is a small, dependency-free Python library that lints and generates image alt text following WCAG 2.2 and the WAI alt decision tree, with HTML scanning and a vision LLM port.
 
 ## Shape
 
 ```text
 caller code --> alt_text (public API in __init__.py)
                     |
-                    +-- pure functions, no I/O, no global state
+                    +-- lint, html_scan, images: pure functions, no I/O
+                    +-- generate: calls a VisionLLMPort supplied by the caller
+                    +-- __main__: command line, reads files, prints results
 ```
 
-- **Public API**: the names listed in `__all__` of `src/alt_text/__init__.py`. Anything else is
-  internal and may change without a major version.
-- **Errors**: invalid input raises built-in exceptions (`ValueError`, `TypeError`) with a clear
-  message; the library never prints or exits.
-- **Side effects**: none. If a feature needs I/O, isolate it in its own module behind a small
-  interface and record the choice in an ADR.
-
-## Quality contract
-
-`scripts/check.py` is the single definition of the gates; `fabrica.json` tells the factory and CI
-how to run it. See [TESTING.md](TESTING.md).
+- **Public API**: the names listed in `__all__` of `src/alt_text/__init__.py`: `AltIssue`, `AltTextError`, `AltTextResult`, `ImageInfo`, `ImgFinding`, `Purpose`, `__version__`, `generate_alt_text`, `lint_alt_text`, `read_image_info`, `scan_html`.
+- **Errors**: invalid input raises `AltTextError` with a stable `code`, or built-in `TypeError` and `ValueError` for wrong argument types and values.
+- **Network**: the library makes no network calls. Image bytes are sent only to the LLM object the caller provides.
+- **Logging**: a module logger with a `NullHandler` only.
 
 ## Decisions
 

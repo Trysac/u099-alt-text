@@ -19,6 +19,9 @@ classifiers = [
 ]
 dependencies = []
 
+[project.scripts]
+alt-text = "alt_text.__main__:main"
+
 [project.urls]
 Homepage = "https://github.com/Trysac/u099-alt-text"
 Source = "https://github.com/Trysac/u099-alt-text"
